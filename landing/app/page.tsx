@@ -1,10 +1,10 @@
+import { DownloadButton } from "@/components/DownloadButton";
 import { ExternalLink } from "@/components/ExternalLink";
 import { HeroDemo } from "@/components/HeroDemo";
 import { Keycap } from "@/components/Keycap";
 import {
   APP_VERSION,
   GITHUB_REPO,
-  LATEST_DMG_URL,
   LATEST_RELEASE_PAGE,
   RAYCAST_PR,
 } from "@/lib/links";
@@ -73,12 +73,7 @@ function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
-          <ExternalLink
-            href={LATEST_DMG_URL}
-            className="inline-flex items-center gap-2 h-11 px-5 rounded-md bg-text text-bg font-medium text-sm hover:bg-text-muted transition-colors"
-          >
-            Download for macOS
-          </ExternalLink>
+          <DownloadButton variant="hero">Download for macOS</DownloadButton>
           <ExternalLink
             href={GITHUB_REPO}
             className="inline-flex items-center gap-2 h-11 px-5 rounded-md border border-border bg-surface text-text font-medium text-sm hover:border-text-muted transition-colors"
@@ -250,12 +245,9 @@ function Install() {
               A lightweight menu-bar app. Drag to Applications, grant Accessibility permission, press <Inline>⌥⌘K</Inline>.
             </p>
             <div className="flex flex-col gap-2 pt-2">
-              <ExternalLink
-                href={LATEST_DMG_URL}
-                className="inline-flex items-center justify-center h-10 px-4 rounded-md bg-accent text-bg font-medium text-sm hover:bg-accent/90 transition-colors"
-              >
+              <DownloadButton variant="install">
                 Download KeyMap-{APP_VERSION}.dmg
-              </ExternalLink>
+              </DownloadButton>
               <ExternalLink
                 href={LATEST_RELEASE_PAGE}
                 className="inline-flex items-center justify-center h-9 text-xs text-text-muted hover:text-text transition-colors"
