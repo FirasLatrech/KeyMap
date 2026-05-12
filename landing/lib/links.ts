@@ -1,7 +1,7 @@
 // Canonical external URLs for the landing page. Keep them here so every CTA
 // stays in sync when we cut a new release.
 
-export const GITHUB_REPO = "https://github.com/FirasLatrach/KeyMap";
+export const GITHUB_REPO = "https://github.com/FirasLatrech/KeyMap";
 export const RAYCAST_PR  = "https://github.com/raycast/extensions/pull/27836";
 
 /// Latest GitHub release. The "latest" alias resolves to whatever release we

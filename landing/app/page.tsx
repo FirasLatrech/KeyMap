@@ -335,11 +335,19 @@ function Footer() {
   return (
     <footer className="px-6 py-12 border-t border-border">
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-2 text-sm text-text-muted">
+        <div className="flex items-center gap-2 text-sm text-text-muted flex-wrap">
           <Logo />
           <span className="font-mono">KeyMap Fix</span>
-          <span>·</span>
-          <span>Built in Tunis 🇹🇳</span>
+          <span aria-hidden>·</span>
+          <span>
+            Built by{" "}
+            <ExternalLink
+              href="https://firaslatrach.vercel.app/"
+              className="text-text hover:text-accent transition-colors underline-offset-4 hover:underline"
+            >
+              Firas Latrach
+            </ExternalLink>
+          </span>
         </div>
         <div className="flex items-center gap-5 text-sm text-text-muted">
           <ExternalLink href={GITHUB_REPO} className="hover:text-text transition-colors">
