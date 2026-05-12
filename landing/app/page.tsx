@@ -1,5 +1,12 @@
 import { HeroDemo } from "@/components/HeroDemo";
 import { Keycap } from "@/components/Keycap";
+import {
+  APP_VERSION,
+  GITHUB_REPO,
+  LATEST_DMG_URL,
+  LATEST_RELEASE_PAGE,
+  RAYCAST_PR,
+} from "@/lib/links";
 
 export default function Page() {
   return (
@@ -8,7 +15,7 @@ export default function Page() {
       <Hero />
       <Problem />
       <HowItWorks />
-      <Layouts />
+      <Install />
       <Privacy />
       <Footer />
     </main>
@@ -23,12 +30,14 @@ function Nav() {
           <Logo />
           <span className="font-mono text-sm font-medium">KeyMap Fix</span>
         </div>
-        <a
-          href="https://www.raycast.com/store"
-          className="text-sm text-text-muted hover:text-text transition-colors"
-        >
-          Raycast Store →
-        </a>
+        <div className="flex items-center gap-5 text-sm text-text-muted">
+          <a href="#install" className="hover:text-text transition-colors">
+            Install
+          </a>
+          <a href={GITHUB_REPO} className="hover:text-text transition-colors">
+            GitHub
+          </a>
+        </div>
       </div>
     </nav>
   );
@@ -51,7 +60,7 @@ function Hero() {
       <div className="max-w-6xl mx-auto flex flex-col items-center text-center gap-8">
         <span className="inline-flex items-center gap-2 px-3 h-7 rounded-full border border-border bg-surface text-[11px] font-mono text-text-muted tracking-wider uppercase">
           <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-          Raycast extension · macOS
+          macOS · v{APP_VERSION}
         </span>
 
         <h1 className="text-5xl sm:text-7xl font-semibold tracking-tight max-w-3xl">
@@ -59,23 +68,27 @@ function Hero() {
         </h1>
 
         <p className="text-lg sm:text-xl text-text-muted max-w-2xl leading-relaxed">
-          Convert mis-typed text between Arabic, English, and French keyboard layouts in any macOS app. One keystroke.
+          Convert mis-typed text between any two keyboard layouts you have enabled on your Mac. One keystroke.
         </p>
 
-        <div className="flex items-center gap-3 pt-2">
+        <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
           <a
-            href="#install"
+            href={LATEST_DMG_URL}
             className="inline-flex items-center gap-2 h-11 px-5 rounded-md bg-text text-bg font-medium text-sm hover:bg-text-muted transition-colors"
           >
-            Install from Raycast Store
+            Download for macOS
           </a>
           <a
-            href="https://github.com/firaslatrach/keymap-fix"
+            href={GITHUB_REPO}
             className="inline-flex items-center gap-2 h-11 px-5 rounded-md border border-border bg-surface text-text font-medium text-sm hover:border-text-muted transition-colors"
           >
-            View on GitHub
+            View source on GitHub
           </a>
         </div>
+
+        <p className="text-xs text-text-muted">
+          Universal binary (Apple Silicon + Intel) · macOS 13+ · 420 KB
+        </p>
 
         <div className="w-full pt-12">
           <HeroDemo />
@@ -175,9 +188,21 @@ function Card({
 
 function HowItWorks() {
   const steps = [
-    { n: "01", title: "Select your text", body: "Highlight the gibberish in any macOS app — Slack, Notes, your editor, anywhere." },
-    { n: "02", title: "Press ⌥⌘K", body: "KeyMap detects the script and converts the selection in place. No menus. No dialogs." },
-    { n: "03", title: "Keep working", body: "A small toast confirms the direction. Hit ⌘+R inside Raycast to reverse if you guessed wrong." },
+    {
+      n: "01",
+      title: "Select your text",
+      body: "Highlight the gibberish in any macOS app — Slack, Notes, your editor, anywhere.",
+    },
+    {
+      n: "02",
+      title: "Press ⌥⌘K",
+      body: "KeyMap reads the layouts you have enabled in System Settings, detects the script, and converts the selection in place.",
+    },
+    {
+      n: "03",
+      title: "Keep working",
+      body: "A small toast confirms the direction. Open Settings from the menu bar to pin a fixed direction or change the hotkey.",
+    },
   ];
   return (
     <section className="px-6 py-24 border-t border-border">
@@ -200,65 +225,81 @@ function HowItWorks() {
   );
 }
 
-function Layouts() {
-  const cards = [
-    {
-      tag: "AR ↔ EN",
-      title: "Arabic ⇄ English",
-      example: { from: "a;vh", to: "شكرا", lang: "ar" as const },
-      status: "Stable",
-    },
-    {
-      tag: "FR ↔ EN",
-      title: "AZERTY ⇄ QWERTY",
-      example: { from: "qwerty", to: "azerty", lang: "fr" as const },
-      status: "Stable",
-    },
-    {
-      tag: "Soon",
-      title: "Hebrew, Russian, Greek",
-      example: { from: "—", to: "Vote on GitHub", lang: "fr" as const },
-      status: "Planned",
-    },
-  ];
+function Install() {
   return (
-    <section className="px-6 py-24 border-t border-border">
+    <section id="install" className="px-6 py-24 border-t border-border scroll-mt-24">
       <div className="max-w-6xl mx-auto">
-        <SectionLabel>Supported layouts</SectionLabel>
+        <SectionLabel>Install</SectionLabel>
         <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight mt-3 max-w-2xl">
-          Built for bilingual keyboards.
+          Two ways to use KeyMap.
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-12">
-          {cards.map((c) => {
-            const rtl = c.example.lang === "ar";
-            return (
-              <div key={c.title} className="rounded-xl border border-border bg-surface p-6 flex flex-col gap-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono text-accent tracking-wider uppercase">
-                    {c.tag}
-                  </span>
-                  <span className="text-[10px] font-mono text-text-muted tracking-wider uppercase">
-                    {c.status}
-                  </span>
-                </div>
-                <h3 className="text-lg font-medium">{c.title}</h3>
-                <div className="rounded-md border border-border bg-bg p-4 flex items-center justify-between gap-3 mt-2">
-                  <code className="font-mono text-sm text-text-muted">{c.example.from}</code>
-                  <span className="text-text-muted">→</span>
-                  <span
-                    dir={rtl ? "rtl" : "ltr"}
-                    lang={c.example.lang}
-                    className={`text-sm ${rtl ? "font-arabic text-base" : "font-mono"}`}
-                  >
-                    {c.example.to}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-12">
+          <div className="rounded-xl border border-accent/40 bg-surface p-6 flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono text-accent tracking-wider uppercase">
+                Standalone Mac app
+              </span>
+              <span className="text-[10px] font-mono text-text-muted tracking-wider uppercase">
+                Available · v{APP_VERSION}
+              </span>
+            </div>
+            <h3 className="text-xl font-medium">Download the DMG</h3>
+            <p className="text-sm text-text-muted leading-relaxed">
+              A lightweight menu-bar app. Drag to Applications, grant Accessibility permission, press <Inline>⌥⌘K</Inline>.
+            </p>
+            <div className="flex flex-col gap-2 pt-2">
+              <a
+                href={LATEST_DMG_URL}
+                className="inline-flex items-center justify-center h-10 px-4 rounded-md bg-accent text-bg font-medium text-sm hover:bg-accent/90 transition-colors"
+              >
+                Download KeyMap-{APP_VERSION}.dmg
+              </a>
+              <a
+                href={LATEST_RELEASE_PAGE}
+                className="inline-flex items-center justify-center h-9 text-xs text-text-muted hover:text-text transition-colors"
+              >
+                All releases →
+              </a>
+            </div>
+            <p className="text-xs text-text-muted pt-2 border-t border-border">
+              Unsigned. First launch: right-click the app → <strong className="text-text">Open</strong> → <strong className="text-text">Open Anyway</strong>.
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-border bg-surface p-6 flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono text-text-muted tracking-wider uppercase">
+                Raycast extension
+              </span>
+              <span className="text-[10px] font-mono text-text-muted tracking-wider uppercase">
+                In review
+              </span>
+            </div>
+            <h3 className="text-xl font-medium">Use inside Raycast</h3>
+            <p className="text-sm text-text-muted leading-relaxed">
+              If you use Raycast, KeyMap also ships as an extension with a live preview and reverse direction. The Raycast Store submission is awaiting review.
+            </p>
+            <div className="flex flex-col gap-2 pt-2">
+              <a
+                href={RAYCAST_PR}
+                className="inline-flex items-center justify-center h-10 px-4 rounded-md border border-border bg-bg text-text font-medium text-sm hover:border-text-muted transition-colors"
+              >
+                Track Raycast PR #27836
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function Inline({ children }: { children: React.ReactNode }) {
+  return (
+    <code className="px-1.5 py-0.5 rounded border border-border bg-bg font-mono text-[12px]">
+      {children}
+    </code>
   );
 }
 
@@ -270,8 +311,7 @@ function Privacy() {
         <div className="flex flex-col gap-2">
           <h3 className="text-lg font-medium">100% local. Zero network calls.</h3>
           <p className="text-sm text-text-muted leading-relaxed">
-            KeyMap runs entirely on your Mac. The conversion is a deterministic character map — there is no
-            model, no telemetry, no analytics. Your text never leaves the machine.
+            KeyMap runs entirely on your Mac. Conversions use Apple&apos;s <Inline>UCKeyTranslate</Inline> against the keyboard layouts already installed on your system — no model, no telemetry, no analytics. Your text never leaves the machine.
           </p>
         </div>
       </div>
@@ -301,11 +341,11 @@ function Footer() {
           <span>Built in Tunis 🇹🇳</span>
         </div>
         <div className="flex items-center gap-5 text-sm text-text-muted">
-          <a href="https://github.com/firaslatrach/keymap-fix" className="hover:text-text transition-colors">
+          <a href={GITHUB_REPO} className="hover:text-text transition-colors">
             GitHub
           </a>
-          <a href="https://www.raycast.com/store" className="hover:text-text transition-colors">
-            Raycast Store
+          <a href={LATEST_RELEASE_PAGE} className="hover:text-text transition-colors">
+            Releases
           </a>
         </div>
       </div>

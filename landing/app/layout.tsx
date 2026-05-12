@@ -4,9 +4,16 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://keymap-fix.app"),
   title: "KeyMap Fix — One hotkey. Right alphabet.",
   description:
-    "Convert mis-typed text between Arabic, English, and French keyboard layouts in any macOS app. One keystroke.",
+    "Convert mis-typed text between any two keyboard layouts you have enabled on your Mac. One keystroke.",
+  openGraph: {
+    title: "KeyMap Fix — One hotkey. Right alphabet.",
+    description:
+      "Convert mis-typed text between any two keyboard layouts you have enabled on your Mac. One keystroke.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
