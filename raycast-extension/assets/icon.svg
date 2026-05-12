@@ -1,26 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
   <defs>
-    <clipPath id="rounded">
-      <rect x="0" y="0" width="512" height="512" rx="112" ry="112"/>
+    <clipPath id="squircle">
+      <rect x="0" y="0" width="1024" height="1024" rx="228" ry="228"/>
     </clipPath>
   </defs>
 
-  <g clip-path="url(#rounded)">
-    <rect width="512" height="512" fill="#0A0A0A"/>
+  <g clip-path="url(#squircle)">
+    <rect width="1024" height="1024" fill="#0A0A0A"/>
 
-    <rect x="0.5" y="0.5" width="511" height="511" rx="111.5" ry="111.5"
-          fill="none" stroke="#262626" stroke-width="1"/>
+    <!-- Hairline inner border -->
+    <rect x="2" y="2" width="1020" height="1020" rx="226" ry="226"
+          fill="none" stroke="#262626" stroke-width="3"/>
 
+    <!-- K + ك, vertically centred as a pair -->
     <g font-weight="700" text-anchor="middle">
-      <text x="178" y="328" font-size="280"
+      <text x="372" y="640" font-size="560"
             font-family="ui-monospace, 'SF Mono', Menlo, monospace"
-            fill="#FAFAFA" letter-spacing="-10">K</text>
+            fill="#FAFAFA" letter-spacing="-18">K</text>
 
-      <text x="346" y="332" font-size="260"
-            font-family="'IBM Plex Sans Arabic', 'Geeza Pro', 'Arial', system-ui, sans-serif"
+      <text x="680" y="650" font-size="520"
+            font-family="'IBM Plex Sans Arabic', 'Geeza Pro', system-ui, sans-serif"
             fill="#7C5CFF">ك</text>
     </g>
 
-    <rect x="96" y="404" width="320" height="3" rx="1.5" fill="#7C5CFF"/>
+    <!-- Keyboard baseline accent -->
+    <rect x="220" y="820" width="584" height="6" rx="3" fill="#7C5CFF"/>
   </g>
 </svg>
