@@ -1,3 +1,4 @@
+import { ExternalLink } from "@/components/ExternalLink";
 import { HeroDemo } from "@/components/HeroDemo";
 import { Keycap } from "@/components/Keycap";
 import {
@@ -34,9 +35,9 @@ function Nav() {
           <a href="#install" className="hover:text-text transition-colors">
             Install
           </a>
-          <a href={GITHUB_REPO} className="hover:text-text transition-colors">
+          <ExternalLink href={GITHUB_REPO} className="hover:text-text transition-colors">
             GitHub
-          </a>
+          </ExternalLink>
         </div>
       </div>
     </nav>
@@ -72,18 +73,18 @@ function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
-          <a
+          <ExternalLink
             href={LATEST_DMG_URL}
             className="inline-flex items-center gap-2 h-11 px-5 rounded-md bg-text text-bg font-medium text-sm hover:bg-text-muted transition-colors"
           >
             Download for macOS
-          </a>
-          <a
+          </ExternalLink>
+          <ExternalLink
             href={GITHUB_REPO}
             className="inline-flex items-center gap-2 h-11 px-5 rounded-md border border-border bg-surface text-text font-medium text-sm hover:border-text-muted transition-colors"
           >
             View source on GitHub
-          </a>
+          </ExternalLink>
         </div>
 
         <p className="text-xs text-text-muted">
@@ -249,18 +250,18 @@ function Install() {
               A lightweight menu-bar app. Drag to Applications, grant Accessibility permission, press <Inline>⌥⌘K</Inline>.
             </p>
             <div className="flex flex-col gap-2 pt-2">
-              <a
+              <ExternalLink
                 href={LATEST_DMG_URL}
                 className="inline-flex items-center justify-center h-10 px-4 rounded-md bg-accent text-bg font-medium text-sm hover:bg-accent/90 transition-colors"
               >
                 Download KeyMap-{APP_VERSION}.dmg
-              </a>
-              <a
+              </ExternalLink>
+              <ExternalLink
                 href={LATEST_RELEASE_PAGE}
                 className="inline-flex items-center justify-center h-9 text-xs text-text-muted hover:text-text transition-colors"
               >
                 All releases →
-              </a>
+              </ExternalLink>
             </div>
             <p className="text-xs text-text-muted pt-2 border-t border-border">
               Unsigned. First launch: right-click the app → <strong className="text-text">Open</strong> → <strong className="text-text">Open Anyway</strong>.
@@ -281,12 +282,12 @@ function Install() {
               If you use Raycast, KeyMap also ships as an extension with a live preview and reverse direction. The Raycast Store submission is awaiting review.
             </p>
             <div className="flex flex-col gap-2 pt-2">
-              <a
+              <ExternalLink
                 href={RAYCAST_PR}
                 className="inline-flex items-center justify-center h-10 px-4 rounded-md border border-border bg-bg text-text font-medium text-sm hover:border-text-muted transition-colors"
               >
                 Track Raycast PR #27836
-              </a>
+              </ExternalLink>
             </div>
           </div>
         </div>
@@ -341,12 +342,12 @@ function Footer() {
           <span>Built in Tunis 🇹🇳</span>
         </div>
         <div className="flex items-center gap-5 text-sm text-text-muted">
-          <a href={GITHUB_REPO} className="hover:text-text transition-colors">
+          <ExternalLink href={GITHUB_REPO} className="hover:text-text transition-colors">
             GitHub
-          </a>
-          <a href={LATEST_RELEASE_PAGE} className="hover:text-text transition-colors">
+          </ExternalLink>
+          <ExternalLink href={LATEST_RELEASE_PAGE} className="hover:text-text transition-colors">
             Releases
-          </a>
+          </ExternalLink>
         </div>
       </div>
     </footer>
