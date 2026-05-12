@@ -2,16 +2,29 @@ import Foundation
 import Combine
 
 /// User-visible preferences, persisted to `UserDefaults`.
+///
+/// In v1 the app shipped with a hardcoded `defaultDirection` enum. v2 reads the
+/// user's actual enabled keyboard layouts at runtime, so prefs are now layout
+/// IDs (e.g. `"com.apple.keylayout.ABC"`). The old enum key is migrated on
+/// first launch and then deleted.
+@MainActor
 final class Preferences: ObservableObject {
 
     static let shared = Preferences()
 
-    @Published var defaultDirection: DefaultDirection {
-        didSet { defaults.set(defaultDirection.rawValue, forKey: Key.defaultDirection) }
+    @Published var routingMode: RoutingMode {
+        didSet { defaults.set(routingMode.rawValue, forKey: Key.routingMode) }
     }
 
-    @Published var azertyEnabled: Bool {
-        didSet { defaults.set(azertyEnabled, forKey: Key.azertyEnabled) }
+    /// Preferred source layout ID. Used as a hint by Auto, or as the fixed
+    /// source when `routingMode == .fixed`.
+    @Published var preferredSourceID: String? {
+        didSet { defaults.set(preferredSourceID, forKey: Key.preferredSourceID) }
+    }
+
+    /// Preferred target layout ID.
+    @Published var preferredTargetID: String? {
+        didSet { defaults.set(preferredTargetID, forKey: Key.preferredTargetID) }
     }
 
     @Published var showToast: Bool {
@@ -22,50 +35,66 @@ final class Preferences: ObservableObject {
         didSet { defaults.set(launchAtLogin, forKey: Key.launchAtLogin) }
     }
 
-    enum DefaultDirection: String, CaseIterable, Identifiable {
+    enum RoutingMode: String, CaseIterable, Identifiable {
         case auto
-        case en2ar
-        case ar2en
-        case en2fr
-        case fr2en
+        case fixed
 
         var id: String { rawValue }
-
         var label: String {
             switch self {
-            case .auto: return "Auto detect"
-            case .en2ar: return "EN → AR"
-            case .ar2en: return "AR → EN"
-            case .en2fr: return "EN → FR"
-            case .fr2en: return "FR → EN"
-            }
-        }
-
-        func resolve(for text: String, azertyEnabled: Bool) -> Direction {
-            switch self {
-            case .auto: return Layouts.detect(text, azertyEnabled: azertyEnabled)
-            case .en2ar: return .en2ar
-            case .ar2en: return .ar2en
-            case .en2fr: return .en2fr
-            case .fr2en: return .fr2en
+            case .auto:  return "Auto detect"
+            case .fixed: return "Fixed direction"
             }
         }
     }
 
     private enum Key {
-        static let defaultDirection = "keymap.defaultDirection"
-        static let azertyEnabled = "keymap.azertyEnabled"
-        static let showToast = "keymap.showToast"
-        static let launchAtLogin = "keymap.launchAtLogin"
+        static let routingMode        = "keymap.routingMode"
+        static let preferredSourceID  = "keymap.preferredSourceID"
+        static let preferredTargetID  = "keymap.preferredTargetID"
+        static let showToast          = "keymap.showToast"
+        static let launchAtLogin      = "keymap.launchAtLogin"
+
+        // Legacy v1 keys, migrated then deleted on first run.
+        static let legacyDefaultDirection = "keymap.defaultDirection"
+        static let legacyAzertyEnabled    = "keymap.azertyEnabled"
     }
 
     private let defaults: UserDefaults
 
     private init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
-        self.defaultDirection = DefaultDirection(rawValue: defaults.string(forKey: Key.defaultDirection) ?? "") ?? .auto
-        self.azertyEnabled = defaults.object(forKey: Key.azertyEnabled) as? Bool ?? true
+
+        Self.migrateLegacyKeysIfNeeded(in: defaults)
+
+        self.routingMode = RoutingMode(rawValue: defaults.string(forKey: Key.routingMode) ?? "") ?? .auto
+        self.preferredSourceID = defaults.string(forKey: Key.preferredSourceID)
+        self.preferredTargetID = defaults.string(forKey: Key.preferredTargetID)
         self.showToast = defaults.object(forKey: Key.showToast) as? Bool ?? true
         self.launchAtLogin = defaults.object(forKey: Key.launchAtLogin) as? Bool ?? false
+    }
+
+    private static func migrateLegacyKeysIfNeeded(in defaults: UserDefaults) {
+        guard let legacy = defaults.string(forKey: Key.legacyDefaultDirection) else { return }
+
+        let catalog = KeyboardLayout.enabledKeyboardLayouts()
+        let firstASCII  = catalog.first { $0.isASCIICapable }
+        let firstArabic = catalog.first { $0.producesArabicScript }
+
+        switch legacy {
+        case "en2ar":
+            defaults.set(RoutingMode.fixed.rawValue, forKey: Key.routingMode)
+            defaults.set(firstASCII?.id,  forKey: Key.preferredSourceID)
+            defaults.set(firstArabic?.id, forKey: Key.preferredTargetID)
+        case "ar2en":
+            defaults.set(RoutingMode.fixed.rawValue, forKey: Key.routingMode)
+            defaults.set(firstArabic?.id, forKey: Key.preferredSourceID)
+            defaults.set(firstASCII?.id,  forKey: Key.preferredTargetID)
+        default:
+            defaults.set(RoutingMode.auto.rawValue, forKey: Key.routingMode)
+        }
+
+        defaults.removeObject(forKey: Key.legacyDefaultDirection)
+        defaults.removeObject(forKey: Key.legacyAzertyEnabled)
     }
 }

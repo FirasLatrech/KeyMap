@@ -1,40 +1,42 @@
 import XCTest
 @testable import KeyMap
 
-final class LayoutsTests: XCTestCase {
+final class LayoutMapperTableTests: XCTestCase {
 
-    func testEnToArHelloPhrase() {
-        let result = Layouts.convert("hgsghl ugd;l", direction: .en2ar)
-        XCTAssertEqual(result, "السلام عليكم")
+    /// Build a synthetic `Table` and verify the converter walks scalars correctly.
+    func testScalarMapping() {
+        let table = LayoutMapper.Table(
+            scalarToString: [
+                Unicode.Scalar("h"): "ا",
+                Unicode.Scalar("g"): "ل",
+                Unicode.Scalar("s"): "س",
+                Unicode.Scalar("l"): "م",
+                Unicode.Scalar(" "): " ",
+                Unicode.Scalar("u"): "ع",
+                Unicode.Scalar("d"): "ي",
+                Unicode.Scalar(";"): "ك",
+            ],
+            isStrictlyScalarMap: true
+        )
+        XCTAssertEqual(table.convert("hgsghl ugd;l"), "السلام عليكم")
     }
 
-    func testEnToArThankYou() {
-        XCTAssertEqual(Layouts.convert("a;vh", direction: .en2ar), "شكرا")
+    func testIdentityForUnmappedChars() {
+        let table = LayoutMapper.Table(
+            scalarToString: [Unicode.Scalar("a"): "q"],
+            isStrictlyScalarMap: true
+        )
+        XCTAssertEqual(table.convert("abc 123"), "qbc 123")
     }
 
-    func testRoundTripArEn() {
-        let original = "hgsghl"
-        let arabic = Layouts.convert(original, direction: .en2ar)
-        let back = Layouts.convert(arabic, direction: .ar2en)
-        XCTAssertEqual(back, original)
-    }
-
-    func testEnToFr() {
-        // User typed on AZERTY-shaped keyboard while input source was QWERTY:
-        // they intended "azerty", their machine produced "qwerty". Convert back.
-        XCTAssertEqual(Layouts.convert("qwerty", direction: .en2fr), "azerty")
-    }
-
-    func testDetectArabic() {
-        XCTAssertEqual(Layouts.detect("شكرا", azertyEnabled: true), .ar2en)
-    }
-
-    func testDetectAzertyOnlyWhenEnabled() {
-        XCTAssertEqual(Layouts.detect("café", azertyEnabled: true), .fr2en)
-        XCTAssertEqual(Layouts.detect("café", azertyEnabled: false), .en2ar)
-    }
-
-    func testPunctuationPassthrough() {
-        XCTAssertEqual(Layouts.convert("123 abc", direction: .en2ar).hasPrefix("123 "), true)
+    func testNFCNormalizationBeforeLookup() {
+        // Decomposed "é" (U+0065 U+0301) should be normalized to U+00E9 before lookup.
+        let composed = Unicode.Scalar(0x00E9)!
+        let table = LayoutMapper.Table(
+            scalarToString: [composed: "X"],
+            isStrictlyScalarMap: true
+        )
+        let decomposed = "e\u{0301}"
+        XCTAssertEqual(table.convert(decomposed), "X")
     }
 }

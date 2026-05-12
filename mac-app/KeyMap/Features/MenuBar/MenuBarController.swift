@@ -103,16 +103,18 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             rebuildMenu()
             return
         }
-        let outcome = await SelectionConverter.run(using: prefs)
+        let outcome = await SelectionConverter.run(prefs: prefs)
         switch outcome {
-        case .converted(let direction, _):
+        case .converted(let route, _):
             if prefs.showToast {
-                ToastPresenter.show("Converted \(direction.label)")
+                ToastPresenter.show("Converted \(route.label)")
             }
         case .empty:
             ToastPresenter.show("No selection")
         case .unchanged:
             ToastPresenter.show("Nothing to convert")
+        case .noRoute:
+            ToastPresenter.show("Enable a second keyboard layout in Settings")
         case .notTrusted:
             Accessibility.requestTrust()
             rebuildMenu()
