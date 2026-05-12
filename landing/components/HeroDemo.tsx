@@ -8,7 +8,7 @@ type Pair = { wrong: string; right: string; direction: string; lang?: "ar" | "fr
 const PAIRS: Pair[] = [
   { wrong: "hgsghl ugd;l", right: "السلام عليكم", direction: "EN → AR", lang: "ar" },
   { wrong: "a;vh", right: "شكرا", direction: "EN → AR", lang: "ar" },
-  { wrong: "qzerty", right: "azerty", direction: "EN → FR", lang: "fr" },
+  { wrong: "qwerty", right: "azerty", direction: "EN → FR", lang: "fr" },
 ];
 
 const TYPE_MS = 90;

@@ -126,10 +126,13 @@ const MAPS: Record<Direction, Map<string, string>> = {
   fr2en: buildMap(invert(EN_TO_FR_PAIRS)),
 };
 
-// Multi-character source keys (e.g. "لا" → "b") need to be matched first.
+// Multi-character source keys are deliberately disabled — the Arabic `لا`
+// family of ligatures cannot be reliably round-tripped because the same two
+// scalars also occur unrelated to the ligature, so collapsing them back to a
+// single QWERTY key silently corrupts text.
 const MULTI_CHAR_KEYS: Record<Direction, string[]> = {
   en2ar: [],
-  ar2en: Array.from(MAPS.ar2en.keys()).filter((k) => k.length > 1),
+  ar2en: [],
   en2fr: [],
   fr2en: [],
 };

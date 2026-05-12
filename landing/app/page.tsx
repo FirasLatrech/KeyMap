@@ -211,7 +211,7 @@ function Layouts() {
     {
       tag: "FR ↔ EN",
       title: "AZERTY ⇄ QWERTY",
-      example: { from: "qzerty", to: "azerty", lang: "fr" as const },
+      example: { from: "qwerty", to: "azerty", lang: "fr" as const },
       status: "Stable",
     },
     {
